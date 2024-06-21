@@ -1,0 +1,9 @@
+body{
+   background-color: #252D38;;
+}
+.container-fluid{
+    max-width: 1920px;
+}
+.container{
+    max-width: 1548px;
+}

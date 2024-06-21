@@ -1,0 +1,8 @@
+export const ContractAddress =
+    "0x6c23fe09153bb1469d0570818db0ede49bf99014b62af4657a4b623bd2c2e757";
+export const coinType = '0x6c23fe09153bb1469d0570818db0ede49bf99014b62af4657a4b623bd2c2e757::RERE::RERE';
+export const stakingContract = "0xec7dc0f9cb2c504b57377d7b6e0d2c5f751b334d5907f30703fbf7ed0e4c3621"
+export const MINT_FEE = "10000000000"
+export const stakingPool = "0x985bc63de27467854cc04745470a8ba3884868f6d1b8d6ca4bc54be2b2d7333c"
+export const adminCap = "0x80bc72da6a68bf52f978b8d17ed9b49d21a83663a69b258ba80066cd4fd19598"
+export const clock = "0x000000000000000000000000000000000000000000000000000000000000006"
