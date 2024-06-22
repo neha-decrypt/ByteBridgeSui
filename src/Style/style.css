@@ -1,4 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+body {
+  background-color: #252d38;
+}
+
+.container-fluid {
+  max-width: 1920px;
+}
+
+.container {
+  max-width: 1548px;
+}
+
 .HeaderBar {
   background: rgba(255, 255, 255, 0.04) !important;
   -webkit-backdrop-filter: blur(39.5999984741px) !important;
@@ -68,8 +80,7 @@
 
 .StakePortal {
   position: relative;
-  height: 100%;
-  min-height: calc(100vh - 100px);
+  min-height: 100vh;
 }
 .StakePortal .BGUP {
   position: absolute;
@@ -109,201 +120,107 @@
   bottom: 0%;
   right: 0;
 }
-.StakePortal .HeadingText {
-  color: #fff;
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 127.856px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 123.07px;
-  text-transform: uppercase;
-  /* 96.257% */
+.StakePortal .card-deck {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 50px;
 }
-.StakePortal .paraText {
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 33px;
-  /* 165% */
+.StakePortal .card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: #ffffff;
 }
-.StakePortal .BGVid {
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: calc(100vh - 100px);
-  mix-blend-mode: plus-lighter;
+.StakePortal .card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-.StakePortal .stakeForm {
-  width: 504.201px;
+.StakePortal .card-body {
   padding: 20px;
-  flex-shrink: 0;
-  border-radius: 12.347px;
-  border: 0.5px solid rgba(0, 157, 218, 0.2509803922);
-  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
-  -webkit-backdrop-filter: blur(8.9px);
-          backdrop-filter: blur(8.9px);
-  flex-direction: column !important;
 }
-.StakePortal .UpperSwitch {
+.StakePortal .card-title {
+  font-size: 1.25rem;
+  color: #26313a;
+}
+.StakePortal .card-text {
+  font-size: 1rem;
+  color: #26313a;
+  margin: 1%;
+}
+.StakePortal .input-group {
+  margin-top: 15px;
+}
+.StakePortal .input-group .form-control {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.StakePortal .input-group .btn {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.StakePortal .btn-group {
   display: flex;
-  width: 433.403px;
-  height: 53.577px;
-  padding: 5.168px 6.061px 4.409px 6.341px;
-  justify-content: center;
-  align-items: flex-start;
-  flex-shrink: 0;
-  border-radius: 53.577px;
-  border: 0.957px solid rgba(255, 255, 255, 0.03);
-  background: rgba(255, 255, 255, 0.1);
+  justify-content: space-between;
+  margin-top: 15px;
+  width: 100% !important;
+  gap: 12px !important;
 }
-.StakePortal .UpperSwitch .DepositBtn {
-  display: flex;
-  width: 212px;
-  height: 44px;
-  padding: 12.438px 0px 11.562px 0px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border-radius: 54.534px;
-  border: 0.957px solid rgba(255, 255, 255, 0.03);
-  color: #eee8fc;
-  font-family: "Roboto", sans-serif;
-  font-size: 13.394px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.135px;
-  /* 142.857% */
-}
-.StakePortal .UpperSwitch .active {
-  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
-}
-.StakePortal .FormText {
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 22.005px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  margin-top: 32px;
-  margin-bottom: 32px;
-}
-.StakePortal .EtheriumDiv {
-  display: flex;
-  width: 433.403px;
-  padding: 15.308px 316.696px 14.448px 16.265px;
-  align-items: flex-start;
-  gap: 10.524px;
-  border-radius: 8.611px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 15.308px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.135px;
-  align-items: center;
-  /* 125% */
-}
-.StakePortal .AVAIText {
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.135px;
-  /* 136.677% */
-}
-.StakePortal .greenText {
-  text-align: right;
-  font-family: Roboto;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.135px;
-  opacity: 0.8;
-  background: linear-gradient(104deg, #009dda 0%, #62ba47 97.95%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.StakePortal .TextInputDiv {
-  position: relative;
-}
-.StakePortal .TextInputDiv .TextInput {
-  display: inline-flex;
-  width: 433.403px;
-  padding: 17.221px 13.145px 16.356px 20.091px;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 320.166px;
-  color: #fff;
-  border-radius: 12.347px;
-  border: 0.5px solid rgba(0, 157, 218, 0.2509803922);
-  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
-  -webkit-backdrop-filter: blur(7.558236599px);
-          backdrop-filter: blur(7.558236599px);
-}
-.StakePortal .TextInputDiv .textAbsolute {
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 15.308px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.135px;
-  position: absolute;
-  right: 20px;
-  top: 22%;
-  transform: translate(-5%, 40%);
-}
-.StakePortal .ConnectWallet {
-  border-radius: 4.784px;
-  width: 433.403px;
-  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
-  padding: 15.308px 21.048px;
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 17.221px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 110%;
-  border: transparent;
-  margin-top: 17px;
-  /* 18.943px */
-}
-.StakePortal .connectedDiv {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-  margin: auto;
-}
-.StakePortal .ConnectWallet:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-.StakePortal .stakeInfo {
-  display: flex;
-  color: #fff;
-  align-items: center;
-}
-.StakePortal .refreshIcon {
-  margin-left: 8px;
+.StakePortal .btn {
+  border-radius: 10px !important;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.2s, box-shadow 0.2s;
   cursor: pointer;
-  transition: transform 0.2s ease;
 }
-.StakePortal .rotating {
-  animation: rotate 2s linear infinite;
+.StakePortal .btn-primary {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  transition: all 0.5s ease-in-out;
 }
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.StakePortal .btn-primary.rounded-right {
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+.StakePortal .btn-primary:hover {
+  background-color: #fff;
+  border: 1px solid #0782ee;
+  color: #0782ee;
+}
+.StakePortal .btn-secondary {
+  background-color: #fff;
+  border: 1px solid #0782ee;
+  color: #0782ee;
+  transition: all 0.5s ease-in-out;
+}
+.StakePortal .btn-secondary:hover {
+  background-color: #0782ee;
+  border: 1px solid #fff;
+  color: #fff;
+}
+.StakePortal .btn-info {
+  background-color: transparent;
+  border: none;
+  padding: 10px 0;
+}
+.StakePortal .btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.StakePortal .loader-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.StakePortal .loading .blur {
+  filter: blur(5px);
+}
+.StakePortal .loading .card {
+  pointer-events: none;
 }
 
 .Footer {
@@ -357,4 +274,9 @@
 
 .sui-logo {
   height: 23px;
+}
+
+.connectedDiv {
+  display: flex;
+  justify-content: center;
 }/*# sourceMappingURL=style.css.map */

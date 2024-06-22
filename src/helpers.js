@@ -1,6 +1,6 @@
 import { Transaction } from '@mysten/sui/transactions';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
-import { MINT_FEE, clock, coinType, stakingContract, stakingPool } from './constants';
+import { MINT_FEE, clock, coinType, demoCoinType, pools, stakingContract, stakingPool1, stakingPool2 } from './constants';
 import { toast } from 'react-toastify';
 
 export const getSuiClient = () => {
@@ -13,25 +13,29 @@ export const getSuiClient = () => {
     return client;
 };
 
-const client = getSuiClient()
+export const client = getSuiClient()
 
-export const fetchBalance = async (walletAddress) => {
+export const fetchSuiBalance = async (walletAddress) => {
     try {
-        const fullnodeUrl = getFullnodeUrl("testnet"); // or 'mainnet' if you're on the main network
-        const client = new SuiClient({ url: fullnodeUrl });
-
-
-        console.log("walletAddress", walletAddress)
-        console.log("Fetching SUI balance...");
         const suiBalance = await client.getCoins({ owner: walletAddress });
-        console.log("SUI Balance Response:", suiBalance);
+        const suiAmount = suiBalance.data.reduce((total, coin) => total + parseInt(coin.balance, 10), 0);
+
+        return suiAmount
+    }
+    catch (err) {
+        console.log("Error", err)
+    }
+}
+
+export const fetchTokenBalance = async (walletAddress, index) => {
+    try {
 
         let tokenBalance = 0;
         let nextCursor = null;
-
+        console.log(" pools[index]", pools[index])
         do {
-            const tokenResponse = await client.getCoins({ coinType, owner: walletAddress, cursor: nextCursor });
-            console.log("Token Balance Response:", tokenResponse);
+            const tokenResponse = await client.getCoins({ coinType: pools[index].coinType, owner: walletAddress, cursor: nextCursor });
+
 
             for (const coin of tokenResponse.data) {
                 tokenBalance += parseInt(coin.balance, 10);
@@ -40,18 +44,11 @@ export const fetchBalance = async (walletAddress) => {
             nextCursor = tokenResponse.nextCursor;
         } while (nextCursor);
 
-        const suiAmount = suiBalance.data.reduce((total, coin) => total + parseInt(coin.balance, 10), 0);
 
-        console.log("SUI Amount:", suiAmount);
-        console.log("Token Amount:", tokenBalance);
-
-        return {
-            suiAmount: Number(suiAmount) / 1e9, tokenBalance: Number(tokenBalance) / 1e9
-        };
+        return tokenBalance;
     } catch (error) {
         console.error("Error fetching token balance:", error.message);
-        console.error("Stack Trace:", error.stack);
-        return { suiAmount: 0, tokenBalance: 0 };
+        return 0;
     }
 };
 
@@ -64,21 +61,18 @@ export const deserializeU64 = (valueArray) => {
     return result;
 }
 
-export const getValidCoinId = async (account, amountNeeded, signAndExecute) => {
-    let tokenBal = await fetchBalance(account.address)
-    if (Number(tokenBal?.tokenBalance) < Number(amountNeeded)) {
-        console.log("111")
+export const getValidCoinId = async (account, amountNeeded, signAndExecute, index) => {
+    let tokenBalance = await fetchTokenBalance(account.address, index)
+    if (Number(tokenBalance) < Number(amountNeeded)) {
         return false
     }
-    let coins = await client.getCoins({ coinType, owner: account?.address });
-    console.log("coins", coins);
+    let coins = await client.getCoins({ coinType: pools[index].coinType, owner: account?.address });
+    console.log("coins", coins)
     if (coins.data.length === 0) {
         console.error("No coins found for the address");
-        console.log("222")
         return false;
     }
     let primaryCoinId = coins.data[0]?.coinObjectId
-    console.log("primaryCoinId", primaryCoinId)
     if (coins.data[0]?.balance >= Number(amountNeeded) * 1e9) {
         return primaryCoinId
     }
@@ -91,7 +85,6 @@ export const getValidCoinId = async (account, amountNeeded, signAndExecute) => {
         i++
     }
     if (requiredCoinId != null) {
-        console.log("333")
         return requiredCoinId
     }
     const coinIdsToMerge = coins.data.slice(1).map(coin => coin.coinObjectId);
@@ -99,9 +92,6 @@ export const getValidCoinId = async (account, amountNeeded, signAndExecute) => {
     if (coinIdsToMerge.length > 0) {
         const mergeTx = new Transaction();
         mergeTx.setGasBudget(MINT_FEE);
-
-        console.log("Primary Coin ID: ", primaryCoinId);
-        console.log("Coins to merge: ", coinIdsToMerge);
 
         mergeTx.mergeCoins(mergeTx.object(primaryCoinId), coinIdsToMerge.map(id => mergeTx.object(id)));
         try {
@@ -120,21 +110,17 @@ export const getValidCoinId = async (account, amountNeeded, signAndExecute) => {
 
                         // The first created object in this Transaction should be the new Counter
                         const objectId = txRes.effects?.created?.[0]?.reference?.objectId;
-                        console.log("merged", objectId)
 
-                        console.log("444")
                         return primaryCoinId
                     },
                     onError: async ({ digest }) => {
                         try {
                             toast.error("Transaction Failed: " + digest)
-                            console.log("tx", digest)
-                            console.log("333")
+
                             return false
                         }
                         catch (Err) {
                             console.log("Error", Err)
-                            console.log("444")
                             return false
                         }
                     }
@@ -143,22 +129,20 @@ export const getValidCoinId = async (account, amountNeeded, signAndExecute) => {
         }
         catch (Err) {
             console.log("Error", Err)
-            console.log("555")
             return false
         }
     }
-
+    return primaryCoinId
 }
 
-export const Stake = async (account, stakeAmount, signAndExecute, setReload, reload, setPageLoader) => {
+export const Stake = async (account, stakeAmount, signAndExecute, setReload, reload, setPageLoader, index) => {
     try {
         if (Number(stakeAmount) <= 0) {
             toast.error("Invalid Stake Amount")
             setPageLoader(false)
             return false
         }
-        let primaryCoinId = await getValidCoinId(account, stakeAmount, signAndExecute)
-        console.log("primary coin id", primaryCoinId)
+        let primaryCoinId = await getValidCoinId(account, stakeAmount, signAndExecute, index)
         if (primaryCoinId === false) {
             toast.error("Insufficient Token balance");
             setPageLoader(false)
@@ -168,17 +152,16 @@ export const Stake = async (account, stakeAmount, signAndExecute, setReload, rel
         setTimeout(async () => {
             const tx = new Transaction();
 
-            console.log("rd", account?.address)
             tx.setGasBudget(1000000000);
+            console.log("primaryyyy", primaryCoinId)
             let [coin] = tx.splitCoins(primaryCoinId, [tx.pure(Number(stakeAmount) * 1e9)])
-
-            console.log("tx")
+            console.log("coin", coin)
             tx.moveCall({
-                typeArguments: [coinType],
+                typeArguments: [pools[index].coinType],
                 arguments: [
-                    tx.object(stakingPool),
+                    tx.object(pools[index].poolId),
                     tx.object(coin),
-                    tx.object(clock),
+                    tx.object(clock)
                 ],
                 target: `${stakingContract}::staking::stake`,
             });
@@ -196,8 +179,6 @@ export const Stake = async (account, stakeAmount, signAndExecute, setReload, rel
                                 },
                             });
 
-                            // The first created object in this Transaction should be the new Counter
-                            const objectId = tx.effects?.created?.[0]?.reference?.objectId;
 
                             // if (objectId) {
                             toast.success("Transaction Success: " + digest)
@@ -208,7 +189,6 @@ export const Stake = async (account, stakeAmount, signAndExecute, setReload, rel
                         onError: async ({ digest }) => {
                             toast.error("Transaction Failed: " + digest)
                             setPageLoader(false)
-                            console.log("tx", digest)
                             return false
                         }
                     },
@@ -229,20 +209,17 @@ export const Stake = async (account, stakeAmount, signAndExecute, setReload, rel
     }
 }
 
-export const unStake = async (signAndExecute, setReload, reload, setPageLoader) => {
+export const unStake = async (signAndExecute, setReload, reload, setPageLoader, index) => {
     try {
         const tx = new Transaction();
 
         tx.setGasBudget(1000000000);
 
-        // const sui = await client.getCoins({ owner: account.address });
-        // console.log("sui", sui);
-        console.log("before sign")
 
         tx.moveCall({
-            typeArguments: [coinType],
+            typeArguments: [pools[index].coinType],
             arguments: [
-                tx.object(stakingPool),
+                tx.object(pools[index].poolId),
                 tx.object(clock),
             ],
             target: `${stakingContract}::staking::unstake`,
@@ -272,7 +249,6 @@ export const unStake = async (signAndExecute, setReload, reload, setPageLoader) 
                 },
                 onError: async ({ digest }) => {
                     toast.error("Transaction Failed: " + digest)
-                    console.log("tx", digest)
                     setPageLoader(false)
                     return false
                 }
@@ -287,21 +263,17 @@ export const unStake = async (signAndExecute, setReload, reload, setPageLoader) 
 
 }
 
-export const claimReward = async (signAndExecute, setReload, reload, setPageLoader) => {
+export const claimReward = async (signAndExecute, setReload, reload, setPageLoader, index) => {
     try {
         const tx = new Transaction();
 
         tx.setGasBudget(1000000000);
 
-        // const sui = await client.getCoins({ owner: account.address });
-        // console.log("sui", sui);
-        console.log("before sign")
-
         tx.moveCall({
-            typeArguments: [coinType],
+            typeArguments: [pools[index].coinType],
             arguments: [
-                tx.object(stakingPool),
-                tx.object(clock),
+                tx.object(pools[index].poolId),
+                tx.object(clock), // Add the account address as an argument
             ],
             target: `${stakingContract}::staking::claim_pending_rewards`,
         });
@@ -343,4 +315,127 @@ export const claimReward = async (signAndExecute, setReload, reload, setPageLoad
         return false
     }
 
+}
+
+export const poolInfo = async (address, index) => {
+    try {
+        console.log("inside pool info", index)
+        const res = await client.call('sui_getObject', {
+            objectId: pools[index].poolId,
+            options: {
+                showContent: true,
+            },
+        });
+
+        if (res?.data?.content?.fields?.users?.length > 0) {
+            for (let i = 0; i < res?.data?.content?.fields?.users?.length; i++) {
+                if (res?.data?.content?.fields?.users[i]?.fields?.user?.toLowerCase() === address?.toLowerCase()) {
+
+                    return { stakedAmount: res?.data?.content?.fields?.users[i]?.fields?.stake_balance }
+                }
+            }
+        }
+        return 0
+    }
+    catch (Err) {
+        console.log("Err", Err)
+        return 0
+    }
+}
+
+export const getPoolsInfoByUser = async (address = null) => {
+    try {
+        if (address == null) {
+            return pools
+        }
+        const result = []
+        const poolInfoPromises = pools.map((pool, key) => poolInfo(address, key));
+        const poolInfos = await Promise.all(poolInfoPromises);
+        poolInfos.reduce((acc, poolId, index) => {
+            const parts = pools[index].coinType.split('::');
+            const lastItem = parts[parts.length - 1];
+            result.push({
+                "poolId": pools[index].poolId,
+                "coinType": pools[index].coinType,
+                "symbol": lastItem,
+                "stakedAmount": poolInfos[index].stakedAmount,
+                "availableBalance": poolInfos[index].tokenBalance
+            })
+        }, {});
+
+        return result;
+
+    }
+    catch (Err) {
+        console.log("Err", Err)
+        return []
+    }
+}
+
+export const getPendingReward = async (address, index) => {
+    try {
+        const tx = new Transaction();
+        tx.moveCall({
+            target: `${stakingContract}::staking::get_pending_rewards`,
+            typeArguments: [pools[index].coinType],
+            arguments: [tx.object(pools[index].poolId), tx.pure(address), tx.pure(clock)],
+        });
+
+
+        let result = await client.devInspectTransactionBlock({ sender: address, transactionBlock: tx })
+        if (result?.effects && result.effects?.status && result.effects?.status?.status === "success" && result?.results) {
+            const returnValues = result?.results?.[0]?.returnValues;
+            if (returnValues.length > 0) {
+                return (Number(deserializeU64(returnValues[0][0])))
+            } else {
+                console.error('No return values from transaction');
+                return 0
+            }
+        } else {
+            console.error('Invalid transaction effects');
+            return 0
+        }
+    }
+    catch (Err) {
+        console.log("Err", Err)
+        return 0
+    }
+}
+
+export const getAllPoolsPendingRewards = async (address) => {
+    try {
+        if (address == null) {
+            return []
+        }
+        const results = []
+        const poolInfoPromises = pools.map((pool, key) => getPendingReward(address, key));
+        const poolInfos = await Promise.all(poolInfoPromises);
+        poolInfos.reduce((acc, poolId, index) => {
+            results.push(poolId)
+        }, {});
+        return results
+    }
+    catch (Err) {
+        console.log("Err", Err)
+        return []
+    }
+}
+
+export const getTokenBalancesForUsers = async (address) => {
+    try {
+        if (address == null) {
+            return []
+        }
+        const results = []
+        const poolInfoPromises = pools.map((pool, key) => fetchTokenBalance(address, key));
+        const poolInfos = await Promise.all(poolInfoPromises);
+        poolInfos.reduce((acc, poolId, index) => {
+            results.push(poolId)
+        }, {});
+        return results
+    }
+    catch (Err) {
+        console.log("Err", Err)
+        return []
+    }
 }

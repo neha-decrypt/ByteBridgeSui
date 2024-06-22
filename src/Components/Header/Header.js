@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ConnectButton, useCurrentAccount } from '@mysten/dapp-kit';
-import { fetchBalance } from '../../helpers';
+import { fetchSuiBalance } from '../../helpers';
 
 
 const Header = () => {
@@ -11,9 +11,8 @@ const Header = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (account && account?.address) {
-
-                let bal = await fetchBalance(account?.address)
-                setSuiBal(bal?.suiAmount)
+                let suiAmount = await fetchSuiBalance(account?.address)
+                setSuiBal(suiAmount)
             }
         }
         fetchData()
@@ -48,7 +47,7 @@ const Header = () => {
                             </li>
                             <li className="nav-item dropdown">
                                 <div className="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {suiBal} SUI
+                                    {suiBal && Number(suiBal) / 1e9} SUI
                                 </div>
 
                             </li>
@@ -66,7 +65,7 @@ const Header = () => {
 
                             <li>
 
-                                <ConnectButton />
+                                <ConnectButton className='ConnectWallet' />
                             </li>
                         </ul>
 

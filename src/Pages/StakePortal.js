@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { clock, coinType, stakingContract, stakingPool } from '../constants';
+import { clock, coinType, stakingContract, stakingPool2, stakingPool1, demoCoinType } from '../constants';
 import { Transaction } from '@mysten/sui/transactions';
-import { Stake, claimReward, deserializeU64, unStake, fetchBalance, getSuiClient } from '../helpers';
+import { Stake, claimReward, deserializeU64, unStake, fetchTokenBalance, client } from '../helpers';
 import { Audio } from 'react-loader-spinner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,6 @@ console.log("herrrrr")
 const StakePortal = (props) => {
     const [withdraw, setWithdraw] = useState(false)
     const account = useCurrentAccount();
-    const client = getSuiClient();
     const [stakedBal, setStakedBal] = useState(0)
     const [stakeAmount, setStakeAmount] = useState(0)
     const [tokenBal, setTokenBal] = useState(0)
@@ -56,15 +55,15 @@ const StakePortal = (props) => {
             setContentLoader(true)
             if (account && account?.address) {
 
-                let bal = await fetchBalance(account?.address)
-                if (bal && bal?.tokenBalance) {
-                    setTokenBal(bal?.tokenBalance)
+                let tokenBalance = await fetchTokenBalance(account?.address)
+                if (tokenBalance) {
+                    setTokenBal(tokenBalance)
                 }
                 else {
                     setTokenBal(0)
                 }
                 const res = await client.call('sui_getObject', {
-                    objectId: stakingPool,
+                    objectId: stakingPool2,
                     options: {
                         showContent: true,
                     },
@@ -84,8 +83,8 @@ const StakePortal = (props) => {
                 const tx = new Transaction();
                 tx.moveCall({
                     target: `${stakingContract}::staking::get_pending_rewards`,
-                    typeArguments: [coinType],
-                    arguments: [tx.object(stakingPool), tx.pure(account?.address), tx.pure(clock)],
+                    typeArguments: [demoCoinType],
+                    arguments: [tx.object(stakingPool2), tx.pure(account?.address), tx.pure(clock)],
                 });
 
                 console.log("account?.address", account?.address)
@@ -172,7 +171,7 @@ const StakePortal = (props) => {
 
                                 <>
                                     <div className='FormText'></div>
-                                    <div className='d-flex align-items-center justify-content-around w-100 mb-1' >
+                                    <div className='d-flex align-items-center justify-content-around w-100 mb-4' >
                                         <div className='AVAIText'>Available: {tokenBal} $BYTES </div>
 
                                     </div>
@@ -192,14 +191,17 @@ const StakePortal = (props) => {
                                     <div className='connectedDiv'>
                                         {account?.address ? <>
                                             <p className='stakeInfo'> Staked Balance: {Number(stakedBal) / 1e9}</p>
-                                            <p className='stakeInfo'>Pending Reward {pendingReward} <FontAwesomeIcon
-                                                icon={faSyncAlt}
-                                                className={`refreshIcon ${isRotating ? 'rotating' : ''}`}
-                                                onClick={handleRefreshClick}
-                                            /></p>
-                                            {stakedBal ? <div><button className='ConnectWallet' disabled={Number(stakedBal) <= 0} onClick={async () => { await localUnstake(signAndExecute, setReload, reload) }}>Unstake</button>
-                                                <button className='ConnectWallet' onClick={() => { claimReward(signAndExecute, setReload, reload, setPageLoader) }}>Claim Pending Reward</button>
-                                            </div> : <button className='ConnectWallet' disabled={Number(stakedBal) > 0} onClick={async () => { await localStake(account, stakeAmount, signAndExecute, setReload, reload) }}>Stake</button>}
+
+
+                                            <button className='ConnectWallet' onClick={async () => { await localStake(account, stakeAmount, signAndExecute, setReload, reload) }}>Stake</button>
+                                            {Number(stakedBal) > 0 && <div>
+                                                <p className='stakeInfo'>Pending Reward {pendingReward} <FontAwesomeIcon
+                                                    icon={faSyncAlt}
+                                                    className={`refreshIcon ${isRotating ? 'rotating' : ''}`}
+                                                    onClick={handleRefreshClick}
+                                                /></p>
+                                                <button className='ConnectWallet' disabled={Number(stakedBal) <= 0} onClick={async () => { await localUnstake(signAndExecute, setReload, reload) }}>Unstake</button>
+                                                <button className='ConnectWallet' onClick={() => { claimReward(signAndExecute, setReload, reload, setPageLoader) }}>Claim Pending Reward</button></div>}
 
                                         </> : <ConnectButton className='ConnectWallet' />}
                                     </div>
