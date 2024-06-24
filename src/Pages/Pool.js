@@ -14,15 +14,23 @@ function Pool() {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
-                
+
                 <Modal.Body>
                     <div id="connect">
-                        <h4>Centered Modal</h4>
-                        <p>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                            consectetur ac, vestibulum at eros.
-                        </p>
+                        <div className="mainBtns">
+                            <button className='active'>Btn1</button>
+                            <button>Btn2</button>
+                        </div>
+                        <div className="inputCon">
+                            <div className="meriInput">
+                                <span>DCB</span>
+                                <input className='myInput' placeholder='0.00' type="text" />
+                            </div>
+                            <div className="text">
+                                <p>Available to stake: 0 DCB</p>
+                                <a href="">Use Max</a>
+                            </div>
+                        </div>
                         <div className="btns">
                             <button>Deposit</button>
                             <button>Cancel</button>
