@@ -108,7 +108,7 @@ const Pools = (props) => {
                         <div className="card mb-3" key={key}>
                             <div className="card-body">
                                 <button
-                                    className="btn-info"
+                                    className="refresh-btn"
                                     onClick={() => handleRefreshClick(key)}
                                     disabled={isRotating}
                                 >

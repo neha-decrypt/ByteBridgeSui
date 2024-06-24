@@ -1,6 +1,6 @@
 #myConnnectBtn {
   border-radius: 5px;
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   border: 10px solid red;
 }
 
@@ -54,7 +54,7 @@
 }
 .HeaderBar .navbar-nav #connectBtn > button {
   border-radius: 5px;
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   color: white;
 }
 @media screen and (max-width: 991px) {
@@ -126,7 +126,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px 0px;
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   -webkit-background-clip: text;
           background-clip: text;
 }
@@ -175,7 +175,7 @@
   min-width: 600px;
 }
 .StakePortal button .item .common-col:last-child button {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   opacity: 0.8;
 }
 .StakePortal .input-group .form-control {
@@ -225,11 +225,6 @@
   background-color: #0782ee;
   border: 1px solid #fff;
   color: #fff;
-}
-.StakePortal .btn-info {
-  background-color: transparent;
-  border: none;
-  padding: 10px 0;
 }
 .StakePortal .btn:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -322,7 +317,7 @@
   padding: 0;
 }
 #Pool .container.first .common-col:first-child .loloPad h4 {
-  color: #FFF;
+  color: #fff;
   font-family: "Bebas Neue", sans-serif;
   font-size: 74px;
   font-style: normal;
@@ -337,7 +332,7 @@
           backdrop-filter: blur(8.8999996185px);
 }
 #Pool .container.first .common-col:last-child .innerCol:first-child .myCard .myInnerCard .myContent .pCon, #Pool .container.first .common-col:last-child .innerCol:last-child .myCard .myInnerCard .myContent .pCon {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   -webkit-background-clip: text;
           background-clip: text;
   display: inline-block;
@@ -351,7 +346,7 @@
   color: transparent;
 }
 #Pool .container.first .common-col:last-child .innerCol:first-child .myCard > h4, #Pool .container.first .common-col:last-child .innerCol:last-child .myCard > h4 {
-  color: #F3EEFC;
+  color: #f3eefc;
   font-family: Roboto;
   font-size: 20px;
   font-style: normal;
@@ -388,7 +383,7 @@
   margin-left: 20px;
 }
 #Pool .container.second .myWrapper .common-col:first-child div.grad {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   -webkit-background-clip: text;
           background-clip: text;
   display: inline-block;
@@ -411,7 +406,7 @@
   gap: 12px;
 }
 #Pool .container.second .myWrapper .common-col:not(:first-child) .common-cls:nth-of-type(1) .ultimate p {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   -webkit-background-clip: text;
           background-clip: text;
   display: inline-block;
@@ -427,7 +422,7 @@
   height: 450px;
   margin: auto;
   border-radius: 12.347px;
-  border: 1.029px solid #009DDA;
+  border: 1.029px solid #009dda;
   background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
   -webkit-backdrop-filter: blur(8.8999996185px);
           backdrop-filter: blur(8.8999996185px);
@@ -450,7 +445,7 @@
   color: white;
 }
 .modal-content .modal-body #connect .mainBtns button.active {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
 }
 .modal-content .modal-body #connect .inputCon .meriInput {
   position: relative;
@@ -466,14 +461,14 @@
 }
 .modal-content .modal-body #connect .inputCon .meriInput input.myInput {
   margin-top: 54px;
-  color: #FFF;
+  color: #fff;
   font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   border-radius: 12.347px;
   padding: 16px 10px;
-  border: 1.029px solid #009DDA;
+  border: 1.029px solid #009dda;
   background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
   -webkit-backdrop-filter: blur(7.558236599px);
           backdrop-filter: blur(7.558236599px);
@@ -497,14 +492,14 @@
   color: white;
 }
 .modal-content .modal-body #connect .inputCon .text a {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   -webkit-background-clip: text;
           background-clip: text;
   display: inline-block;
   color: transparent;
 }
 .modal-content .modal-body #connect .btns {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   -webkit-background-clip: text;
           background-clip: text;
 }
@@ -516,16 +511,21 @@
   align-items: center;
   gap: 9.567px;
   margin-bottom: 10px;
-  border: 2px solid #009DDA;
+  border: 2px solid #009dda;
   background: transparent;
   color: transparent;
   border-radius: 4.784px;
 }
 .modal-content .modal-body #connect .btns button:first-child {
-  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  background: var(--linear, linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
   color: white;
   border: 2px solid transparent;
 }
 .modal-content .modal-body #connect .btns button:hover {
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+}
+.modal-content .modal-body .refresh-btn {
+  background: transparent;
+  border: none;
+  color: white;
 }/*# sourceMappingURL=style.css.map */
