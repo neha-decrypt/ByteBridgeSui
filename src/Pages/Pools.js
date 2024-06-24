@@ -62,6 +62,7 @@ const Pools = (props) => {
                 setPageLoader(true);
             let poolsData = await getPoolsInfoByUser(account?.address)
             setPoolsInfo(poolsData)
+            console.log("poolsData", poolsData)
 
             if (account && account?.address) {
                 let pending = await getAllPoolsPendingRewards(account?.address)

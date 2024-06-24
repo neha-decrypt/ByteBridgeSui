@@ -142,65 +142,94 @@ export const Stake = async (account, stakeAmount, signAndExecute, setReload, rel
             setPageLoader(false)
             return false
         }
-        let primaryCoinId = await getValidCoinId(account, stakeAmount, signAndExecute, index)
+
+        let tokenBalance = await fetchTokenBalance(account.address, index)
+        if (Number(tokenBalance) < Number(stakeAmount) * 1e9) {
+            console.error("No coins found for the address");
+        }
+        let coins = await client.getCoins({ coinType: pools[index].coinType, owner: account?.address });
+        console.log("coins", coins)
+        if (coins.data.length === 0) {
+            console.error("No coins found for the address");
+            return false;
+        }
+        let primaryCoinId = coins.data[0]?.coinObjectId
+
+        let requiredCoinId = null
+        let i = 0
+        const tx = new Transaction();
+        while (i > coins.data.length) {
+            if (coins?.data[i].balance >= Number(stakeAmount) * 1e9) {
+                requiredCoinId = coins.data[i].coinObjectId
+            }
+            i++
+        }
+        if (requiredCoinId != null) {
+            primaryCoinId = requiredCoinId
+        }
+        if (requiredCoinId == null) {
+            const coinIdsToMerge = coins.data.slice(1).map(coin => coin.coinObjectId);
+            if (coinIdsToMerge.length > 0) {
+                tx.mergeCoins(tx.object(primaryCoinId), coinIdsToMerge.map(id => tx.object(id)));
+            }
+        }
+
+        // let primaryCoinId = await getValidCoinId(account, stakeAmount, signAndExecute, index)
         if (primaryCoinId === false) {
             toast.error("Insufficient Token balance");
             setPageLoader(false)
             return false
         }
 
-        setTimeout(async () => {
-            const tx = new Transaction();
 
-            tx.setGasBudget(1000000000);
-            console.log("primaryyyy", primaryCoinId)
-            let [coin] = tx.splitCoins(primaryCoinId, [tx.pure(Number(stakeAmount) * 1e9)])
-            console.log("coin", coin)
-            tx.moveCall({
-                typeArguments: [pools[index].coinType],
-                arguments: [
-                    tx.object(pools[index].poolId),
-                    tx.object(coin),
-                    tx.object(clock)
-                ],
-                target: `${stakingContract}::staking::stake`,
-            });
-            try {
-                signAndExecute(
-                    {
-                        transaction: tx,
+
+        tx.setGasBudget(1000000000);
+        console.log("primaryyyy", primaryCoinId)
+        let [coin] = tx.splitCoins(primaryCoinId, [tx.pure(Number(stakeAmount) * 1e9)])
+        console.log("coin", coin)
+        tx.moveCall({
+            typeArguments: [pools[index].coinType],
+            arguments: [
+                tx.object(pools[index].poolId),
+                tx.object(coin),
+                tx.object(clock)
+            ],
+            target: `${stakingContract}::staking::stake`,
+        });
+        try {
+            signAndExecute(
+                {
+                    transaction: tx,
+                },
+                {
+                    onSuccess: async ({ digest }) => {
+                        const tx = await client.waitForTransaction({
+                            digest,
+                            options: {
+                                showEffects: true,
+                            },
+                        });
+
+
+                        // if (objectId) {
+                        toast.success("Transaction Success: " + digest)
+                        setReload(!reload)
+                        setPageLoader(false)
+                        // }
                     },
-                    {
-                        onSuccess: async ({ digest }) => {
-                            const tx = await client.waitForTransaction({
-                                digest,
-                                options: {
-                                    showEffects: true,
-                                },
-                            });
-
-
-                            // if (objectId) {
-                            toast.success("Transaction Success: " + digest)
-                            setReload(!reload)
-                            setPageLoader(false)
-                            // }
-                        },
-                        onError: async ({ digest }) => {
-                            toast.error("Transaction Failed: " + digest)
-                            setPageLoader(false)
-                            return false
-                        }
-                    },
-                );
-            }
-            catch (Err) {
-                console.log("Error", Err)
-                setPageLoader(false)
-                return false
-            }
-        }, 3000)
-
+                    onError: async ({ digest }) => {
+                        toast.error("Transaction Failed: " + digest)
+                        setPageLoader(false)
+                        return false
+                    }
+                },
+            );
+        }
+        catch (Err) {
+            console.log("Error", Err)
+            setPageLoader(false)
+            return false
+        }
     }
     catch (Err) {
         console.log("Error", Err)
@@ -326,16 +355,24 @@ export const poolInfo = async (address, index) => {
                 showContent: true,
             },
         });
-
+        let stats = res?.data?.content?.fields?.stats?.fields
+        if (stats) {
+            console.log("stats", stats)
+        }
+        let response = {
+            total_staked: stats?.staked_balance,
+            total_reward: stats?.total_reward
+        }
         if (res?.data?.content?.fields?.users?.length > 0) {
             for (let i = 0; i < res?.data?.content?.fields?.users?.length; i++) {
                 if (res?.data?.content?.fields?.users[i]?.fields?.user?.toLowerCase() === address?.toLowerCase()) {
-
-                    return { stakedAmount: res?.data?.content?.fields?.users[i]?.fields?.stake_balance }
+                    response.stakedAmount = res?.data?.content?.fields?.users[i]?.fields?.stake_balance
+                    break
                 }
             }
         }
-        return 0
+
+        return response
     }
     catch (Err) {
         console.log("Err", Err)
@@ -359,7 +396,8 @@ export const getPoolsInfoByUser = async (address = null) => {
                 "coinType": pools[index].coinType,
                 "symbol": lastItem,
                 "stakedAmount": poolInfos[index].stakedAmount,
-                "availableBalance": poolInfos[index].tokenBalance
+                "total_staked": poolInfos[index].total_staked,
+                "total_reward": poolInfos[index].total_reward
             })
         }, {});
 
