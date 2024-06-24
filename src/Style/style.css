@@ -1,14 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-body {
-  background-color: #252d38;
-}
-
-.container-fluid {
-  max-width: 1920px;
-}
-
-.container {
-  max-width: 1548px;
+#myConnnectBtn {
+  border-radius: 5px;
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  border: 10px solid red;
 }
 
 .HeaderBar {
@@ -59,6 +52,11 @@ body {
   width: 100%;
   gap: 30px;
 }
+.HeaderBar .navbar-nav #connectBtn > button {
+  border-radius: 5px;
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  color: white;
+}
 @media screen and (max-width: 991px) {
   .HeaderBar .navbar-nav {
     flex-direction: column;
@@ -97,7 +95,7 @@ body {
   width: 294px;
   height: 294px;
   flex-shrink: 0;
-  z-index: 9999;
+  z-index: 2;
   top: 0%;
   left: 10%;
 }
@@ -120,39 +118,65 @@ body {
   bottom: 0%;
   right: 0;
 }
-.StakePortal .card-deck {
+.StakePortal .itemHeadings {
+  padding: 100px 10px 0px 10px;
+}
+.StakePortal .itemHeadings .common-col {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 50px;
+  align-items: center;
+  padding: 10px 0px;
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  -webkit-background-clip: text;
+          background-clip: text;
 }
-.StakePortal .card {
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+.StakePortal .itemHeadings .common-col:first-child {
+  justify-content: flex-start;
+  min-width: 600px;
+  padding-left: 10px;
+}
+.StakePortal .itemHeadings .common-col h4 {
+  color: transparent;
+  font-size: 16px;
+}
+.StakePortal button {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+.StakePortal button:focus {
+  outline: none;
+  box-shadow: none;
+}
+.StakePortal button:hover {
+  box-shadow: none !important;
+}
+.StakePortal button .item {
+  color: white;
   width: 100%;
-  overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
-  background: #ffffff;
+  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  border-radius: 12px;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 20;
 }
-.StakePortal .card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.StakePortal button .item .common-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
-.StakePortal .card-body {
-  padding: 20px;
+.StakePortal button .item .common-col:first-child {
+  min-width: 600px;
 }
-.StakePortal .card-title {
-  font-size: 1.25rem;
-  color: #26313a;
-}
-.StakePortal .card-text {
-  font-size: 1rem;
-  color: #26313a;
-  margin: 1%;
-}
-.StakePortal .input-group {
-  margin-top: 15px;
+.StakePortal button .item .common-col:last-child button {
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  opacity: 0.8;
 }
 .StakePortal .input-group .form-control {
   border-top-left-radius: 6px;
@@ -171,7 +195,7 @@ body {
 }
 .StakePortal .btn {
   border-radius: 10px !important;
-  padding: 10px 20px;
+  padding: 0px 20px;
   font-size: 1rem;
   transition: background-color 0.2s, box-shadow 0.2s;
   cursor: pointer;
@@ -231,7 +255,7 @@ body {
   gap: 30px;
   background: #1f2732;
 }
-.Footer .FText {
+.Footer .container .FText {
   color: #fff;
   text-align: center;
   font-family: "Inter", sans-serif;
@@ -247,7 +271,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999; /* Ensure loader stays on top */
+  z-index: 999;
+  /* Ensure loader stays on top */
 }
 
 .loader-inner {
@@ -264,12 +289,15 @@ body {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: filter 0.3s ease; /* Smooth transition for blur effect */
+  transition: filter 0.3s ease;
+  /* Smooth transition for blur effect */
 }
 
 .blur {
-  filter: blur(5px); /* Blur effect when loading */
-  pointer-events: none; /* Disable pointer events on blurred content */
+  filter: blur(5px);
+  /* Blur effect when loading */
+  pointer-events: none;
+  /* Disable pointer events on blurred content */
 }
 
 .sui-logo {
@@ -279,4 +307,154 @@ body {
 .connectedDiv {
   display: flex;
   justify-content: center;
+}
+
+#Pool .container.first {
+  color: white;
+  margin: 95px auto 35px auto;
+}
+#Pool .container.first .common-col:first-child .loloPad {
+  padding: 32px 0px;
+}
+#Pool .container.first .common-col:first-child .loloPad h4,
+#Pool .container.first .common-col:first-child .loloPad p {
+  margin: 0;
+  padding: 0;
+}
+#Pool .container.first .common-col:first-child .loloPad h4 {
+  color: #FFF;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 74px;
+  font-style: normal;
+  font-weight: 400;
+}
+#Pool .container.first .common-col:last-child .innerCol:first-child .myCard .myInnerCard .myContent, #Pool .container.first .common-col:last-child .innerCol:last-child .myCard .myInnerCard .myContent {
+  padding: 26px;
+  border-radius: 12px;
+  border: 1.029px solid rgba(0, 156, 218, 0.5);
+  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+  -webkit-backdrop-filter: blur(8.8999996185px);
+          backdrop-filter: blur(8.8999996185px);
+}
+#Pool .container.first .common-col:last-child .innerCol:first-child .myCard .myInnerCard .myContent .pCon, #Pool .container.first .common-col:last-child .innerCol:last-child .myCard .myInnerCard .myContent .pCon {
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  -webkit-background-clip: text;
+          background-clip: text;
+  display: inline-block;
+}
+#Pool .container.first .common-col:last-child .innerCol:first-child .myCard .myInnerCard .myContent .pCon p, #Pool .container.first .common-col:last-child .innerCol:last-child .myCard .myInnerCard .myContent .pCon p {
+  font-family: "Roboto";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21.092px;
+  color: transparent;
+}
+#Pool .container.first .common-col:last-child .innerCol:first-child .myCard > h4, #Pool .container.first .common-col:last-child .innerCol:last-child .myCard > h4 {
+  color: #F3EEFC;
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28.123px;
+}
+#Pool .myCon {
+  margin-top: 75px;
+}
+#Pool .myCon h4 {
+  color: white;
+  font-family: "Bebas Neue";
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+#Pool .container.second .myWrapper {
+  color: white;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1.029px solid rgba(0, 156, 218, 0.5);
+  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+  -webkit-backdrop-filter: blur(8.8999996185px);
+          backdrop-filter: blur(8.8999996185px);
+}
+#Pool .container.second .myWrapper .common-col {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px 40px;
+}
+#Pool .container.second .myWrapper .common-col:first-child {
+  background: rgba(217, 217, 217, 0.03);
+}
+#Pool .container.second .myWrapper .common-col:first-child .common-cls p.ff {
+  margin-left: 20px;
+}
+#Pool .container.second .myWrapper .common-col:first-child div.grad {
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  -webkit-background-clip: text;
+          background-clip: text;
+  display: inline-block;
+}
+#Pool .container.second .myWrapper .common-col:first-child div.grad p {
+  color: transparent;
+  margin: 0;
+  padding: 0;
+}
+#Pool .container.second .myWrapper .common-col:not(:first-child) {
+  cursor: pointer;
+}
+#Pool .container.second .myWrapper .common-col:not(:first-child) .common-cls:nth-of-type(1) * {
+  margin: 0;
+  padding: 0;
+}
+#Pool .container.second .myWrapper .common-col:not(:first-child) .common-cls:nth-of-type(1) .ultimate {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#Pool .container.second .myWrapper .common-col:not(:first-child) .common-cls:nth-of-type(1) .ultimate p {
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  -webkit-background-clip: text;
+          background-clip: text;
+  display: inline-block;
+  color: transparent;
+}
+#Pool .container.second .myWrapper .common-col:not(:first-child) .common-cls:nth-of-type(3) p {
+  display: inline;
+  margin-left: 10px;
+}
+
+.modal-content {
+  width: 504px;
+  height: 426px;
+  margin: auto;
+  border-radius: 12.347px;
+  border: 1.029px solid #009DDA;
+  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+  -webkit-backdrop-filter: blur(8.8999996185px);
+          backdrop-filter: blur(8.8999996185px);
+}
+.modal-content .modal-body #connect .btns {
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+.modal-content .modal-body #connect .btns button {
+  width: 100%;
+  display: flex;
+  padding: 15.308px 21.048px;
+  justify-content: center;
+  align-items: center;
+  gap: 9.567px;
+  margin-bottom: 10px;
+  border-radius: 4.784px;
+  -o-border-image: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+     border-image: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  border-image-slice: 2;
+  border-image-repeat: round;
+  background: transparent;
+  color: transparent;
+  border-radius: 4.784px;
+}
+.modal-content .modal-body #connect .btns button:hover {
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  color: white;
 }/*# sourceMappingURL=style.css.map */

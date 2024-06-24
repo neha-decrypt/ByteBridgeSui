@@ -7,6 +7,8 @@ import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import { pools } from '../constants';
 
 const Pools = (props) => {
+   
+
     const account = useCurrentAccount();
     const [stakeAmount, setStakeAmount] = useState([]);
     const [tokenBalances, setTokenBalances] = useState([]);
@@ -101,7 +103,6 @@ const Pools = (props) => {
 
             <div className={`${pageLoader ? 'blur' : ''}`}>
                 <div className="card-deck">
-
                     {poolsInfo && poolsInfo?.length > 0 && poolsInfo?.map((pool, key) => (
                         <div className="card mb-3" key={key}>
                             <div className="card-body">

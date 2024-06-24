@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'Cobbler Sans';
+    src: url('CobblerSans-Regular.eot');
+    src: local('Cobbler Sans Regular'), local('CobblerSans-Regular'),
+        url('CobblerSans-Regular.eot?#iefix') format('embedded-opentype'),
+        url('CobblerSans-Regular.woff2') format('woff2'),
+        url('CobblerSans-Regular.woff') format('woff'),
+        url('CobblerSans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cobbler Sans';
+    src: url('CobblerSans-SemiBold.eot');
+    src: local('Cobbler Sans SemiBold'), local('CobblerSans-SemiBold'),
+        url('CobblerSans-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('CobblerSans-SemiBold.woff2') format('woff2'),
+        url('CobblerSans-SemiBold.woff') format('woff'),
+        url('CobblerSans-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cobbler Sans';
+    src: url('CobblerSans-Light.eot');
+    src: local('Cobbler Sans Light'), local('CobblerSans-Light'),
+        url('CobblerSans-Light.eot?#iefix') format('embedded-opentype'),
+        url('CobblerSans-Light.woff2') format('woff2'),
+        url('CobblerSans-Light.woff') format('woff'),
+        url('CobblerSans-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cobbler Sans';
+    src: url('CobblerSans-Medium.eot');
+    src: local('Cobbler Sans Medium'), local('CobblerSans-Medium'),
+        url('CobblerSans-Medium.eot?#iefix') format('embedded-opentype'),
+        url('CobblerSans-Medium.woff2') format('woff2'),
+        url('CobblerSans-Medium.woff') format('woff'),
+        url('CobblerSans-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cobbler Sans';
+    src: url('CobblerSans-Bold.eot');
+    src: local('Cobbler Sans Bold'), local('CobblerSans-Bold'),
+        url('CobblerSans-Bold.eot?#iefix') format('embedded-opentype'),
+        url('CobblerSans-Bold.woff2') format('woff2'),
+        url('CobblerSans-Bold.woff') format('woff'),
+        url('CobblerSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cobbler Sans';
+    src: url('CobblerSans-Black.eot');
+    src: local('Cobbler Sans Black'), local('CobblerSans-Black'),
+        url('CobblerSans-Black.eot?#iefix') format('embedded-opentype'),
+        url('CobblerSans-Black.woff2') format('woff2'),
+        url('CobblerSans-Black.woff') format('woff'),
+        url('CobblerSans-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
