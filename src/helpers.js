@@ -356,14 +356,16 @@ export const poolInfo = async (address, index) => {
             },
         });
         let stats = res?.data?.content?.fields?.stats?.fields
+        console.log("res?.data?.content?.fields", res?.data?.content?.fields)
         if (stats) {
             console.log("stats", stats)
         }
         let response = {
             total_staked: stats?.staked_balance,
-            total_reward: stats?.total_reward
+            total_reward: stats?.total_reward,
+            reward_percent: res?.data?.content?.fields?.reward_percent
         }
-        if (res?.data?.content?.fields?.users?.length > 0) {
+        if (res?.data?.content?.fields?.users?.length > 0 && address != null) {
             for (let i = 0; i < res?.data?.content?.fields?.users?.length; i++) {
                 if (res?.data?.content?.fields?.users[i]?.fields?.user?.toLowerCase() === address?.toLowerCase()) {
                     response.stakedAmount = res?.data?.content?.fields?.users[i]?.fields?.stake_balance
@@ -382,9 +384,9 @@ export const poolInfo = async (address, index) => {
 
 export const getPoolsInfoByUser = async (address = null) => {
     try {
-        if (address == null) {
-            return pools
-        }
+        // if (address == null) {
+        //     return pools
+        // }
         const result = []
         const poolInfoPromises = pools.map((pool, key) => poolInfo(address, key));
         const poolInfos = await Promise.all(poolInfoPromises);
@@ -397,11 +399,19 @@ export const getPoolsInfoByUser = async (address = null) => {
                 "symbol": lastItem,
                 "stakedAmount": poolInfos[index].stakedAmount,
                 "total_staked": poolInfos[index].total_staked,
-                "total_reward": poolInfos[index].total_reward
+                "total_reward": poolInfos[index].total_reward,
+                "reward_percent": poolInfos[index].reward_percent
             })
         }, {});
-
-        return result;
+        let total_volume_for_platform = 0
+        let total_volume_for_user = 0
+        let total_rewards_earned_by_user = 0
+        for (let i = 0; i < pools?.length; i++) {
+            total_volume_for_platform += Number(result[i].total_staked) * pools[i].price / 1e9
+            total_volume_for_user += Number(result[i].stakedAmount) * pools[i].price / 1e9
+            total_rewards_earned_by_user += Number(result[i].total_reward) * pools[i].price / 1e9
+        }
+        return { result, total_volume_for_platform, total_volume_for_user, total_rewards_earned_by_user };
 
     }
     catch (Err) {
