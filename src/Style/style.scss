@@ -548,7 +548,7 @@
 
 .modal-content {
   width: 504px;
-  height: 426px;
+  height: 450px;
   margin: auto;
 
   border-radius: 12.347px;
@@ -559,6 +559,88 @@
   .modal-body {
 
     #connect {
+      .mainBtns {
+        margin-top: 34px;
+        border: 1px solid red;
+        padding: 5px;
+        border-radius: 53.577px;
+        border: 0.957px solid rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.10);
+
+        button {
+          width: 50%;
+          border-radius: 54.534px;
+          border: 0.957px solid rgba(255, 255, 255, 0.03);
+          background: transparent;
+          border: none;
+
+          &.active {
+            background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+          }
+
+          padding: 12px 0px;
+          color: white;
+
+        }
+      }
+
+      .inputCon {
+        .meriInput {
+          position: relative;
+
+          span {
+            right: 20px;
+            top: 50%;
+            transform: translateY(50%);
+            position: absolute;
+            color: white;
+            background: transparent;
+            box-shadow: none;
+          }
+
+          input.myInput {
+            margin-top: 54px;
+            color: #FFF;
+            font-family: Roboto;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            border-radius: 12.347px;
+            padding: 16px 10px;
+            border: 1.029px solid #009DDA;
+            background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+            backdrop-filter: blur(7.558236598968506px);
+            width: 100%;
+
+            &::placeholder {
+              color: white;
+            }
+
+            &:focus-visible {
+              outline: none;
+            }
+          }
+        }
+
+        .text {
+          display: flex;
+          justify-content: space-between;
+          // border: 1px solid wheat;
+          padding: 10px;
+
+          p {
+            color: white;
+          }
+
+          a {
+            background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+            background-clip: text;
+            display: inline-block;
+            color: transparent
+          }
+        }
+      }
+
       .btns {
         background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
         background-clip: text;
@@ -572,20 +654,23 @@
           align-items: center;
           gap: 9.567px;
           margin-bottom: 10px;
-          border-radius: 4.784px;
-          border-image: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
-          border-image-slice: 2 ;
-          border-image-repeat: round;
+          border: 2px solid #009DDA;
           background: transparent;
           color: transparent;
           border-radius: 4.784px;
-          &:hover {
+          
+          &:first-child {
             background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
             color: white;
+            border: 2px solid transparent;
           }
 
+          &:hover {
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+          }
         }
       }
+
     }
   }
 }
