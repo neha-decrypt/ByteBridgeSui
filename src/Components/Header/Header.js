@@ -63,14 +63,10 @@ const Header = () => {
                                 </ul>
                             </li>
 
-                            <li>
-
+                            <li id='connectBtn'>
                                 <ConnectButton className='ConnectWallet' />
                             </li>
                         </ul>
-
-
-
                     </div>
                 </div>
             </nav>

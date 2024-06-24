@@ -1,13 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-
-body {
-  background-color: #252d38;
-}
-.container-fluid {
-  max-width: 1920px;
-}
-.container {
-  max-width: 1548px;
+#myConnnectBtn {
+  border-radius: 5px;
+  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+  border: 10px solid red;
 }
 
 .HeaderBar {
@@ -31,10 +25,8 @@ body {
     align-items: center;
     gap: 10px;
     border-radius: 5px;
-    background: var(
-      --linear,
-      linear-gradient(104deg, #009dda 0%, #62ba47 97.95%)
-    );
+    background: var(--linear,
+        linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
     color: #fff;
     font-family: "Roboto", sans-serif;
     font-size: 18px;
@@ -45,14 +37,13 @@ body {
     transition: background 0.3s ease-in;
 
     &:hover {
-      background: var(
-        --linear,
-        linear-gradient(104deg, #62ba47 0%, #009dda 97.95%)
-      );
+      background: var(--linear,
+          linear-gradient(104deg, #62ba47 0%, #009dda 97.95%));
     }
   }
 
   .nav-link {
+
     display: block;
     padding: 0.5rem 1rem;
     color: #fff !important;
@@ -61,12 +52,19 @@ body {
       border-color 0.15s ease-in-out;
   }
 
+
   .navbar-nav {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
     gap: 30px;
+
+    #connectBtn>button {
+      border-radius: 5px;
+      background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+      color: white;
+    }
 
     @media screen and (max-width: 991px) {
       flex-direction: column;
@@ -75,6 +73,7 @@ body {
       width: 100%;
       margin-top: 20px;
     }
+
   }
 
   .navbar-toggler {
@@ -103,15 +102,13 @@ body {
   .BGUPCIRCLE {
     position: absolute;
     border-radius: 294px;
-    background: var(
-      --linear,
-      linear-gradient(104deg, #009dda 0%, #62ba47 97.95%)
-    );
+    background: var(--linear,
+        linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
     filter: blur(240.25px);
     width: 294px;
     height: 294px;
     flex-shrink: 0;
-    z-index: 9999;
+    z-index: 2;
     top: 0%;
     left: 10%;
   }
@@ -119,10 +116,8 @@ body {
   .BGDNCIRCLE {
     position: absolute;
     border-radius: 294px;
-    background: var(
-      --linear,
-      linear-gradient(104deg, #009dda 0%, #62ba47 97.95%)
-    );
+    background: var(--linear,
+        linear-gradient(104deg, #009dda 0%, #62ba47 97.95%));
     filter: blur(240.25px);
     width: 294px;
     height: 294px;
@@ -140,46 +135,92 @@ body {
     right: 0;
   }
 
-  .card-deck {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 50px;
+
+  .itemHeadings {
+
+    // border: 1px solid red;
+    padding: 100px 10px 0px 10px;
+
+    .common-col {
+
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0px;
+      background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+      background-clip: text;
+      // border: 1px solid red;
+
+      &:first-child {
+        // border: 1px solid red;
+        justify-content: flex-start;
+        min-width: 600px;
+        padding-left: 10px;
+      }
+
+      h4 {
+        color: transparent;
+        font-size: 16px;
+      }
+    }
   }
 
-  .card {
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-    background: #ffffff;
+  button {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    &:hover {
+      box-shadow: none !important;
+    }
+
+    .item {
+      // border: 1px solid green;
+      color: white;
+      width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+      backdrop-filter: blur(2px);
+      // margin-bottom: 10px;
+      border-radius: 12px;
+      padding: 0px 10px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 20;
+
+      .common-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        // border: 1px solid red;
+
+        &:first-child {
+          min-width: 600px;
+        }
+
+        &:last-child {
+
+          button {
+            background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+            opacity: 0.8;
+          }
+        }
+
+      }
+    }
   }
 
-  .card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
 
-  .card-body {
-    padding: 20px;
-  }
 
-  .card-title {
-    font-size: 1.25rem;
-    color: #26313a;
-  }
 
-  .card-text {
-    font-size: 1rem;
-    color: #26313a;
-    margin: 1%;
-  }
-
-  .input-group {
-    margin-top: 15px;
-  }
 
   .input-group .form-control {
     border-top-left-radius: 6px;
@@ -201,7 +242,7 @@ body {
 
   .btn {
     border-radius: 10px !important;
-    padding: 10px 20px;
+    padding: 0px 20px;
     font-size: 1rem;
     transition: background-color 0.2s, box-shadow 0.2s;
     cursor: pointer;
@@ -212,10 +253,12 @@ body {
     border: none;
     color: white;
     transition: all 0.5s ease-in-out;
+
     &.rounded-right {
       border-top-left-radius: 0px !important;
       border-bottom-left-radius: 0px !important;
     }
+
     &:hover {
       background-color: #fff;
       border: 1px solid #0782ee;
@@ -228,6 +271,7 @@ body {
     border: 1px solid #0782ee;
     color: #0782ee;
     transition: all 0.5s ease-in-out;
+
     &:hover {
       background-color: #0782ee;
       border: 1px solid #fff;
@@ -269,15 +313,18 @@ body {
   gap: 30px;
   background: #1f2732;
 
-  .FText {
-    color: #fff;
-    text-align: center;
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.096px;
+  .container {
+
+    .FText {
+      color: #fff;
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: -0.096px;
+    }
   }
 }
 
@@ -286,7 +333,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999; /* Ensure loader stays on top */
+  z-index: 999;
+  /* Ensure loader stays on top */
 }
 
 .loader-inner {
@@ -303,12 +351,15 @@ body {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: filter 0.3s ease; /* Smooth transition for blur effect */
+  transition: filter 0.3s ease;
+  /* Smooth transition for blur effect */
 }
 
 .blur {
-  filter: blur(5px); /* Blur effect when loading */
-  pointer-events: none; /* Disable pointer events on blurred content */
+  filter: blur(5px);
+  /* Blur effect when loading */
+  pointer-events: none;
+  /* Disable pointer events on blurred content */
 }
 
 .sui-logo {
@@ -320,5 +371,221 @@ body {
   justify-content: center;
 }
 
-.connect-wallet {
+#Pool {
+  .container.first {
+    color: white;
+    margin: 95px auto 35px auto;
+
+    .common-col {
+      &:first-child {
+        .loloPad {
+          padding: 32px 0px;
+
+          h4,
+          p {
+            margin: 0;
+            padding: 0;
+          }
+
+          h4 {
+            color: #FFF;
+            font-family: "Bebas Neue", sans-serif;
+            font-size: 74px;
+            font-style: normal;
+            font-weight: 400;
+          }
+
+          // p {
+          //   font-family: "Roboto";
+          //   font-size: 15.652px;
+          //   font-style: normal;
+          //   font-weight: 400;
+          // }
+        }
+      }
+
+      &:last-child {
+        .innerCol {
+
+
+          &:first-child,
+          &:last-child {
+            .myCard {
+              .myInnerCard {
+
+
+                .myContent {
+                  padding: 26px;
+                  border-radius: 12px;
+                  border: 1.029px solid rgba(0, 156, 218, 0.5);
+                  ;
+                  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+                  backdrop-filter: blur(8.899999618530273px);
+
+                  .pCon {
+                    background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+                    background-clip: text;
+                    display: inline-block;
+
+                    p {
+                      font-family: "Roboto";
+                      font-size: 14px;
+                      font-style: normal;
+                      font-weight: 500;
+                      line-height: 21.092px;
+                      color: transparent;
+                    }
+                  }
+                }
+              }
+
+              &>h4 {
+                color: #F3EEFC;
+                font-family: Roboto;
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 28.123px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .myCon {
+    margin-top: 75px;
+
+    h4 {
+      color: white;
+      font-family: "Bebas Neue";
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+  }
+
+  .container.second {
+    .myWrapper {
+      color: white;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1.029px solid rgba(0, 156, 218, 0.5);
+      background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+      backdrop-filter: blur(8.899999618530273px);
+
+      .common-col {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 20px 40px;
+
+        &:first-child {
+          background: rgba(217, 217, 217, 0.03);
+
+          .common-cls {
+            p.ff {
+              // border: 1px solid red;
+              margin-left: 20px;
+            }
+          }
+
+          div.grad {
+            background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+            background-clip: text;
+            display: inline-block;
+
+            p {
+              color: transparent;
+              margin: 0;
+              padding: 0;
+            }
+          }
+        }
+
+        &:not(:first-child) {
+          cursor: pointer;
+
+          // border: 1px solid red;
+          .common-cls {
+
+            &:nth-of-type(1) {
+              * {
+                margin: 0;
+                padding: 0;
+              }
+
+              .ultimate {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                p {
+                  background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+                  background-clip: text;
+                  display: inline-block;
+                  color: transparent;
+                }
+
+                // border: 2px solid yellow;
+              }
+            }
+
+            &:nth-of-type(3) {
+              p {
+                display: inline;
+                margin-left: 10px;
+              }
+            }
+          }
+        }
+
+
+
+      }
+    }
+  }
+}
+
+.modal-content {
+  width: 504px;
+  height: 426px;
+  margin: auto;
+
+  border-radius: 12.347px;
+  border: 1.029px solid #009DDA;
+  background: linear-gradient(104deg, rgba(0, 157, 218, 0.06) 0%, rgba(98, 186, 71, 0.06) 97.95%);
+  backdrop-filter: blur(8.899999618530273px);
+
+  .modal-body {
+
+    #connect {
+      .btns {
+        background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+        background-clip: text;
+
+
+        button {
+          width: 100%;
+          display: flex;
+          padding: 15.308px 21.048px;
+          justify-content: center;
+          align-items: center;
+          gap: 9.567px;
+          margin-bottom: 10px;
+          border-radius: 4.784px;
+          border-image: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+          border-image-slice: 2 ;
+          border-image-repeat: round;
+          background: transparent;
+          color: transparent;
+          border-radius: 4.784px;
+          &:hover {
+            background: var(--linear, linear-gradient(104deg, #009DDA 0%, #62BA47 97.95%));
+            color: white;
+          }
+
+        }
+      }
+    }
+  }
 }
