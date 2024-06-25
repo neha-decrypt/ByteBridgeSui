@@ -1,7 +1,8 @@
 import { Transaction } from '@mysten/sui/transactions';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
-import { MINT_FEE, clock, coinType, demoCoinType, pools, stakingContract, stakingPool1, stakingPool2 } from './constants';
+import { MINT_FEE, adminCap, clock, pools, stakingContract } from './constants';
 import { toast } from 'react-toastify';
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 
 export const getSuiClient = () => {
     // use getFullnodeUrl to define Testnet RPC location
@@ -407,9 +408,9 @@ export const getPoolsInfoByUser = async (address = null) => {
         let total_volume_for_user = 0
         let total_rewards_earned_by_user = 0
         for (let i = 0; i < pools?.length; i++) {
-            total_volume_for_platform += Number(result[i].total_staked) * pools[i].price / 1e9
-            total_volume_for_user += Number(result[i].stakedAmount) * pools[i].price / 1e9
-            total_rewards_earned_by_user += Number(result[i].total_reward) * pools[i].price / 1e9
+            total_volume_for_platform += result[i].total_staked ? Number(result[i].total_staked) * pools[i].price / 1e9 : 0
+            total_volume_for_user += result[i].stakedAmount ? Number(result[i].stakedAmount) * pools[i].price / 1e9 : 0
+            total_rewards_earned_by_user += result[i].total_reward ? Number(result[i].total_reward) * pools[i].price / 1e9 : 0
         }
         return { result, total_volume_for_platform, total_volume_for_user, total_rewards_earned_by_user };
 
@@ -487,3 +488,276 @@ export const getTokenBalancesForUsers = async (address) => {
         return []
     }
 }
+
+export const adminCreateStake = async () => {
+    const { keypair, walletAddress } = privateWallet();
+    if (!keypair) {
+        console.error("Keypair is not initialized");
+        return null;
+    }
+
+    try {
+        const tx = new Transaction();
+        const client = getSuiClient(); // Fetch the coin details
+        console.log("client: ", client)
+        let coins = await client.getCoins({ coinType: pools[0].coinType, owner: walletAddress });
+        console.log("coins", coins);
+        if (coins.data.length === 0) {
+            console.error("No coins found for the address");
+            return;
+        }
+
+        console.log("rd", walletAddress)
+        tx.setGasBudget(100000000);
+
+        const sui = await client.getCoins({ owner: walletAddress });
+        console.log("sui", sui);
+        console.log("before sign")
+
+
+        // Merge all coins into one
+        let primaryCoinId = coins.data[0].coinObjectId;
+        console.log("primaryCoinId", primaryCoinId)
+        if (coins.data[0]?.balance < Number(MINT_FEE)) {
+            const coinIdsToMerge = coins.data.slice(1).map(coin => coin.coinObjectId);
+
+            if (coinIdsToMerge.length > 0) {
+                const mergeTx = new Transaction();
+                mergeTx.setGasBudget(MINT_FEE);
+
+                console.log("Primary Coin ID: ", primaryCoinId);
+                console.log("Coins to merge: ", coinIdsToMerge);
+
+                mergeTx.mergeCoins(mergeTx.object(primaryCoinId), coinIdsToMerge.map(id => mergeTx.object(id)));
+
+                // Sign and execute the merge transaction
+                const mergeResult = await client.signAndExecuteTransaction({
+                    signer: keypair,
+                    transaction: mergeTx,
+                });
+
+                console.log("Merge Result: ", mergeResult);
+
+                // Wait for the merge transaction to be confirmed
+                const mergeTransaction = await client.waitForTransaction({
+                    digest: mergeResult.digest,
+                    options: {
+                        showEffects: true,
+                    },
+                });
+
+                console.log("Merge Transaction: ", mergeTransaction);
+
+                if (mergeTransaction.effects.status.status !== "success") {
+                    console.error("Merge transaction failed");
+                    return;
+                }
+            } else {
+                console.log("No additional coins to merge");
+            }
+
+        }
+
+        tx.moveCall({
+            target: `${stakingContract}::staking::create_stake`,
+            typeArguments: [pools[0].coinType],
+            arguments: [
+                tx.object(adminCap),
+                tx.object(primaryCoinId),
+                tx.pure(2, "u64")
+            ]
+        });
+        console.log("before sign")
+        const result = await client.signAndExecuteTransaction({
+            signer: keypair,
+            transaction: tx,
+        });
+        console.log("result", result);
+        const transaction = await client.waitForTransaction({
+            digest: result.digest,
+            options: {
+                showEffects: true,
+            },
+        });
+        console.log("transaction", transaction, transaction?.effects?.status?.status);
+        if (transaction?.effects?.status?.status === "success") {
+            return true
+        }
+        return false
+    } catch (error) {
+        console.log(error)
+        return error;
+    }
+};
+
+export const adminAddStake = async () => {
+    const { keypair, walletAddress } = privateWallet();
+    if (!keypair) {
+        console.error("Keypair is not initialized");
+        return null;
+    }
+
+    try {
+        const tx = new Transaction();
+        const client = getSuiClient(); // Fetch the coin details
+        console.log("client: ", client)
+        let coins = await client.getCoins({ coinType: pools[0].coinType, owner: walletAddress });
+        console.log("coins", coins);
+        if (coins.data.length === 0) {
+            console.error("No coins found for the address");
+            return;
+        }
+
+        console.log("rd", walletAddress)
+        tx.setGasBudget(100000000);
+
+        const sui = await client.getCoins({ owner: walletAddress });
+        console.log("sui", sui);
+        console.log("before sign")
+
+
+        // Merge all coins into one
+        let primaryCoinId = coins.data[0].coinObjectId;
+        console.log("primaryCoinId", primaryCoinId)
+        if (coins.data[0]?.balance < Number(MINT_FEE)) {
+            const coinIdsToMerge = coins.data.slice(1).map(coin => coin.coinObjectId);
+
+            if (coinIdsToMerge.length > 0) {
+                const mergeTx = new Transaction();
+                mergeTx.setGasBudget(MINT_FEE);
+
+                console.log("Primary Coin ID: ", primaryCoinId);
+                console.log("Coins to merge: ", coinIdsToMerge);
+
+                mergeTx.mergeCoins(mergeTx.object(primaryCoinId), coinIdsToMerge.map(id => mergeTx.object(id)));
+
+                // Sign and execute the merge transaction
+                const mergeResult = await client.signAndExecuteTransaction({
+                    signer: keypair,
+                    transaction: mergeTx,
+                });
+
+                console.log("Merge Result: ", mergeResult);
+
+                // Wait for the merge transaction to be confirmed
+                const mergeTransaction = await client.waitForTransaction({
+                    digest: mergeResult.digest,
+                    options: {
+                        showEffects: true,
+                    },
+                });
+
+                console.log("Merge Transaction: ", mergeTransaction);
+
+                if (mergeTransaction.effects.status.status !== "success") {
+                    console.error("Merge transaction failed");
+                    return;
+                }
+            } else {
+                console.log("No additional coins to merge");
+            }
+
+        }
+
+        tx.moveCall({
+            target: `${stakingContract}::staking::deposit_stake`,
+            typeArguments: [pools[0].coinType],
+            arguments: [
+                tx.object(adminCap),
+                tx.object(pools[0]?.poolId),
+                tx.object(primaryCoinId)
+            ]
+        });
+        console.log("before sign")
+        const result = await client.signAndExecuteTransaction({
+            signer: keypair,
+            transaction: tx,
+        });
+        console.log("result", result);
+        const transaction = await client.waitForTransaction({
+            digest: result.digest,
+            options: {
+                showEffects: true,
+            },
+        });
+        console.log("transaction", transaction, transaction?.effects?.status?.status);
+        if (transaction?.effects?.status?.status === "success") {
+            return true
+        }
+        return false
+    } catch (error) {
+        console.log(error)
+        return error;
+    }
+};
+
+export const privateWallet = () => {
+    try {
+        const mn =
+            "home access borrow begin rabbit decorate surge coyote globe alien coin detail";
+        const _keypair = Ed25519Keypair.deriveKeypair(mn);
+        const privateKey = _keypair.getSecretKey();
+        console.log("privateKey", privateKey);
+        const _address = _keypair.getPublicKey().toSuiAddress();
+        console.log("Address:", _address);
+        return { walletAddress: _address, keypair: _keypair, error: null };
+    } catch (error) {
+        console.error("Failed to initialize keypair:", error);
+        return { walletAddress: "", keyPair: "", error };
+    }
+};
+
+export const mintFT = async (index, beneficiary) => {
+    const { keypair, walletAddress } = privateWallet();
+    if (!keypair) {
+        console.error("Keypair is not initialized");
+        return null;
+    }
+
+    try {
+        // const tx = new Transaction();
+        const client = getSuiClient(); // Fetch the coin details
+        console.log("client: ", client)
+
+
+        const tx = new Transaction();
+
+        console.log("rd", walletAddress)
+        tx.setGasBudget(10000000);
+
+        const sui = await client.getCoins({ owner: walletAddress });
+        console.log("sui", sui);
+        console.log("before sign")
+
+
+        tx.moveCall({
+            target: `${pools[index].coin}::mint`,
+            // typeArguments: ["0x8cf30a95bfb2ce8fc0ed0e6ab0b7be83fe8864686d9cc34081dd52628ac4c8a5::NENE::NENE"],
+            arguments: [
+                tx.object(pools[index].treasury),
+                tx.pure(1000000000000, "u64"),
+                tx.object(beneficiary)
+            ]
+        });
+        console.log("before sign")
+        const result = await client.signAndExecuteTransaction({
+            signer: keypair,
+            transaction: tx,
+        });
+        console.log("result", result);
+        const transaction = await client.waitForTransaction({
+            digest: result.digest,
+            options: {
+                showEffects: true,
+            },
+        });
+        console.log("transaction", transaction, transaction?.effects?.status?.status);
+        if (transaction?.effects?.status?.status === "success") {
+            return true
+        }
+        return false
+    } catch (error) {
+        console.log(error)
+        return error;
+    }
+};

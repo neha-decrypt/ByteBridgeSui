@@ -33,10 +33,10 @@ function MyVerticallyCenteredModal({ setIsWithdraw, setModalShow, setPageLoader,
               }} type="text" />
             </div>
             <div className="text">
-              <p>Available to stake: {Number(tokenBalances[activeKey]) / 1e9} {poolsInfo?.[activeKey]?.symbol}</p>
-              <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
+              <p>Available to stake: {tokenBalances[activeKey] ? Number(tokenBalances[activeKey]) / 1e9 : "0"} {poolsInfo?.[activeKey]?.symbol}</p>
+              <p>Staked Balance: {poolsInfo[activeKey]?.stakedAmount ? Number(poolsInfo[activeKey]?.stakedAmount) / 1e9 : "0"} {poolsInfo[activeKey]?.symbol}</p>
               <div className="text-white" onClick={() => {
-                setStakeAmount(Number(tokenBalances[activeKey]) / 1e9)
+                setStakeAmount(tokenBalances[activeKey] ? Number(tokenBalances[activeKey]) / 1e9 : "0")
               }}>Use Max</div>
             </div>
           </div>
@@ -51,9 +51,9 @@ function MyVerticallyCenteredModal({ setIsWithdraw, setModalShow, setPageLoader,
                                     <input className='myInput' placeholder='0.00' type="text" /> */}
               </div>
               <div className="text mt-3">
-                <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
+                <p>Staked Balance: {poolsInfo[activeKey]?.stakedAmount ? Number(poolsInfo[activeKey]?.stakedAmount) / 1e9 : "0"} {poolsInfo[activeKey]?.symbol}</p>
                 <br></br>
-                <p>Pending Reward: {Number(pendingReward[activeKey]) / 1e9} {poolsInfo[activeKey]?.symbol}</p><button
+                <p>Pending Reward: {pendingReward[activeKey] ? Number(pendingReward[activeKey]) / 1e9 : "0"} {poolsInfo[activeKey]?.symbol}</p><button
                   className="refresh-btn"
                   onClick={() => handleRefreshClick(activeKey)}
                   disabled={isRotating}
