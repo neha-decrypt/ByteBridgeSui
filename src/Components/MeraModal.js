@@ -1,50 +1,80 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
-function MyVerticallyCenteredModal(props) {
+function MyVerticallyCenteredModal({ setIsWithdraw, setModalShow, setPageLoader, setReload, setStakeAmount, pageLoader, isWithdraw, poolsInfo, tokenBalances, activeKey, signAndExecute, stakeAmount, localClaimReward, localStake, localUnstake, account, reload, pendingReward, isRotating, handleRefreshClick }) {
   return (
     <Modal
-      {...props}
+      show={true}
+      onHide={() => setModalShow(false)}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
-        </Modal.Title>
-      </Modal.Header>
+
       <Modal.Body>
-        <h4>Centered Modal</h4>
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </p>
+        <div id="connect" className={pageLoader ? "blur" : ""}>
+          <div className="mainBtns">
+            <button className={!isWithdraw ? 'active' : ""} onClick={(e) => {
+              e.preventDefault()
+              setIsWithdraw(false)
+            }}>Deposit</button>
+            <button className={isWithdraw ? 'active' : ""} onClick={(e) => {
+              e.preventDefault()
+              setIsWithdraw(true)
+            }}>Withdraw</button>
+          </div>
+          {!isWithdraw ? (<><div className="inputCon">
+            <div className="meriInput">
+              <span>{poolsInfo?.[activeKey]?.symbol}</span>
+              <input className='myInput' placeholder='0.00' value={stakeAmount} onChange={(e) => {
+                setStakeAmount(e.target.value)
+              }} type="text" />
+            </div>
+            <div className="text">
+              <p>Available to stake: {Number(tokenBalances[activeKey]) / 1e9} {poolsInfo?.[activeKey]?.symbol}</p>
+              <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
+              <div className="text-white" onClick={() => {
+                setStakeAmount(Number(tokenBalances[activeKey]) / 1e9)
+              }}>Use Max</div>
+            </div>
+          </div>
+            <div className="btns">
+              <button onClick={() => localStake(account, stakeAmount, signAndExecute, setReload, reload, setPageLoader, activeKey)}>Deposit</button>
+              <button onClick={() => setModalShow(false)}> Cancel</button>
+            </div>
+          </>) :
+            (<> <div className="inputCon">
+              <div className="meriInput">
+                {/* <span>DCB</span>
+                                    <input className='myInput' placeholder='0.00' type="text" /> */}
+              </div>
+              <div className="text mt-3">
+                <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
+                <br></br>
+                <p>Pending Reward: {Number(pendingReward[activeKey]) / 1e9} {poolsInfo[activeKey]?.symbol}</p><button
+                  className="refresh-btn"
+                  onClick={() => handleRefreshClick(activeKey)}
+                  disabled={isRotating}
+                >
+                  <FontAwesomeIcon icon={faSyncAlt} spin={isRotating} /> Refresh
+                </button>
+              </div>
+
+            </div>
+              <div className="btns">
+                <button onClick={() => localUnstake(signAndExecute, setReload, reload, setPageLoader, activeKey)}>Withdraw</button>
+                <button onClick={() => localClaimReward(signAndExecute, setReload, reload, setPageLoader, activeKey)}>Claim Reward</button>
+                <button onClick={() => setModalShow(false)}>Cancel</button>
+              </div>
+            </>)}
+        </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
+
+    </Modal >
   );
 }
 
-function MeraModal() {
-  const [modalShow, setModalShow] = React.useState(false);
 
-  return (
-    <>
-      <Button onClick={() => setModalShow(true)}>
-        Launch vertically centered modal
-      </Button>
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-    </>
-  );
-}
-
-export default MeraModal;
+export default MyVerticallyCenteredModal

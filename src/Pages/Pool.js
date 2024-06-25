@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { Stake, claimReward, unStake, getPoolsInfoByUser, getAllPoolsPendingRewards, getTokenBalancesForUsers } from '../helpers';
 import { Audio } from 'react-loader-spinner';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import { pools } from '../constants';
+import MyVerticallyCenteredModal from '../Components/MeraModal';
 
 function Pool() {
     const [modalShow, setModalShow] = React.useState(false);
@@ -21,7 +18,7 @@ function Pool() {
     const [isRefresh, setIsRefresh] = useState(false)
     const { mutate: signAndExecute } = useSignAndExecuteTransaction();
     const [isWithdraw, setIsWithdraw] = useState(false)
-    const [activeKey, setActiveKey] = useState()
+    const [activeKey, setActiveKey] = useState(null)
 
     const [overAllStats, setOverAllStats] = useState({
         "total_volume_for_platform": 0,
@@ -87,71 +84,78 @@ function Pool() {
         fetchData();
     }, [account, reload]);
 
-    function MyVerticallyCenteredModal(props) {
-        return (
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
+    // function MyVerticallyCenteredModal() {
+    //     return (
+    //         <Modal
+    //             show={true}
+    //             onHide={() => setModalShow(false)}
+    //             size="lg"
+    //             aria-labelledby="contained-modal-title-vcenter"
+    //             centered
+    //         >
 
-                <Modal.Body>
-                    <div id="connect" className={pageLoader ? "blur" : ""}>
-                        <div className="mainBtns">
-                            <button className={!props.isWithdraw ? 'active' : ""} onClick={() => props.setIsWithdraw(false)}>Deposit</button>
-                            <button className={props.isWithdraw ? 'active' : ""} onClick={() => props.setIsWithdraw(true)}>Withdraw</button>
-                        </div>
-                        {!isWithdraw ? (<><div className="inputCon">
-                            <div className="meriInput">
-                                <span>{poolsInfo?.[activeKey]?.symbol}</span>
-                                <input className='myInput' placeholder='0.00' value={stakeAmount} onChange={(e) => {
-                                    setStakeAmount(e.target.value)
-                                }} type="text" />
-                            </div>
-                            <div className="text">
-                                <p>Available to stake: {Number(tokenBalances[activeKey]) / 1e9} {poolsInfo?.[activeKey]?.symbol}</p>
-                                <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
-                                <div className="text-white" onClick={() => {
-                                    setStakeAmount(Number(tokenBalances[activeKey]) / 1e9)
-                                }}>Use Max</div>
-                            </div>
-                        </div>
-                            <div className="btns">
-                                <button onClick={() => localStake(account, stakeAmount, signAndExecute, setReload, reload, setPageLoader, activeKey)}>Deposit</button>
-                                <button onClick={() => setModalShow(false)}> Cancel</button>
-                            </div>
-                        </>) :
-                            (<> <div className="inputCon">
-                                <div className="meriInput">
-                                    {/* <span>DCB</span>
-                                    <input className='myInput' placeholder='0.00' type="text" /> */}
-                                </div>
-                                <div className="text mt-3">
-                                    <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
-                                    <br></br>
-                                    <p>Pending Reward: {Number(pendingReward[activeKey]) / 1e9} {poolsInfo[activeKey]?.symbol}</p><button
-                                        className="refresh-btn"
-                                        onClick={() => handleRefreshClick(activeKey)}
-                                        disabled={isRotating}
-                                    >
-                                        <FontAwesomeIcon icon={faSyncAlt} spin={isRotating} /> Refresh
-                                    </button>
-                                </div>
+    //             <Modal.Body>
+    //                 <div id="connect" className={pageLoader ? "blur" : ""}>
+    //                     <div className="mainBtns">
+    //                         <button className={!isWithdraw ? 'active' : ""} onClick={(e) => {
+    //                             e.preventDefault()
+    //                             setIsWithdraw(false)
+    //                         }}>Deposit</button>
+    //                         <button className={isWithdraw ? 'active' : ""} onClick={(e) => {
+    //                             e.preventDefault()
+    //                             setIsWithdraw(true)
+    //                         }}>Withdraw</button>
+    //                     </div>
+    //                     {!isWithdraw ? (<><div className="inputCon">
+    //                         <div className="meriInput">
+    //                             <span>{poolsInfo?.[activeKey]?.symbol}</span>
+    //                             <input className='myInput' placeholder='0.00' value={stakeAmount} onChange={(e) => {
+    //                                 setStakeAmount(e.target.value)
+    //                             }} type="text" />
+    //                         </div>
+    //                         <div className="text">
+    //                             <p>Available to stake: {Number(tokenBalances[activeKey]) / 1e9} {poolsInfo?.[activeKey]?.symbol}</p>
+    //                             <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
+    //                             <div className="text-white" onClick={() => {
+    //                                 setStakeAmount(Number(tokenBalances[activeKey]) / 1e9)
+    //                             }}>Use Max</div>
+    //                         </div>
+    //                     </div>
+    //                         <div className="btns">
+    //                             <button onClick={() => localStake(account, stakeAmount, signAndExecute, setReload, reload, setPageLoader, activeKey)}>Deposit</button>
+    //                             <button onClick={() => setModalShow(false)}> Cancel</button>
+    //                         </div>
+    //                     </>) :
+    //                         (<> <div className="inputCon">
+    //                             <div className="meriInput">
+    //                                 {/* <span>DCB</span>
+    //                                 <input className='myInput' placeholder='0.00' type="text" /> */}
+    //                             </div>
+    //                             <div className="text mt-3">
+    //                                 <p>Staked Balance: {Number(poolsInfo[activeKey]?.stakedAmount) / 1e9} {poolsInfo[activeKey]?.symbol}</p>
+    //                                 <br></br>
+    //                                 <p>Pending Reward: {Number(pendingReward[activeKey]) / 1e9} {poolsInfo[activeKey]?.symbol}</p><button
+    //                                     className="refresh-btn"
+    //                                     onClick={() => handleRefreshClick(activeKey)}
+    //                                     disabled={isRotating}
+    //                                 >
+    //                                     <FontAwesomeIcon icon={faSyncAlt} spin={isRotating} /> Refresh
+    //                                 </button>
+    //                             </div>
 
-                            </div>
-                                <div className="btns">
-                                    <button onClick={() => localUnstake(signAndExecute, setReload, reload, setPageLoader, activeKey)}>Withdraw</button>
-                                    <button onClick={() => localClaimReward(signAndExecute, setReload, reload, setPageLoader, activeKey)}>Claim Reward</button>
-                                    <button onClick={() => setModalShow(false)}>Cancel</button>
-                                </div>
-                            </>)}
-                    </div>
-                </Modal.Body>
+    //                         </div>
+    //                             <div className="btns">
+    //                                 <button onClick={() => localUnstake(signAndExecute, setReload, reload, setPageLoader, activeKey)}>Withdraw</button>
+    //                                 <button onClick={() => localClaimReward(signAndExecute, setReload, reload, setPageLoader, activeKey)}>Claim Reward</button>
+    //                                 <button onClick={() => setModalShow(false)}>Cancel</button>
+    //                             </div>
+    //                         </>)}
+    //                 </div>
+    //             </Modal.Body>
 
-            </Modal >
-        );
-    }
+    //         </Modal >
+    //     );
+    // }
 
     return (
         <>
@@ -278,7 +282,7 @@ function Pool() {
 
                                         <div className="col common-cls">
 
-                                            <p>+{pool?.reward_percent ? Number(pool?.reward_percent) / 1e3 : "0"}%</p></div>
+                                            <p>{pool?.reward_percent ? Number(pool?.reward_percent) * 365 / 1e3 : "0"}%</p></div>
                                         <div className="col common-cls">{pendingReward ? Number(pendingReward[key]) / 1e9 : "0"} {pool?.symbol ? pool?.symbol : "-"}</div>
                                         <div className="col common-cls">{pool?.stakedAmount ? Number(pool?.stakedAmount) / 1e9 : "0"} {pool?.symbol ? pool?.symbol : "-"}</div>
                                         <div className="col common-cls">{pool?.total_staked ? Number(pool?.total_staked) / 1e9 : "0"} {pool?.symbol ? pool?.symbol : "-"}</div>
@@ -291,16 +295,13 @@ function Pool() {
                         </div>
 
 
-                        <MyVerticallyCenteredModal
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                            key={activeKey}
-                            isWithdraw={isWithdraw}
-                            setIsWithdraw={setIsWithdraw}
-                        />
+
                     </div>
                 </div>
             </div>
+            {modalShow &&
+                <MyVerticallyCenteredModal setIsWithdraw={setIsWithdraw} setModalShow={setModalShow} setPageLoader={setPageLoader} setReload={setReload} setStakeAmount={setStakeAmount} pageLoader={pageLoader} isWithdraw={isWithdraw} poolsInfo={poolsInfo} tokenBalances={tokenBalances} activeKey={activeKey} signAndExecute={signAndExecute} stakeAmount={stakeAmount} localClaimReward={localClaimReward} localStake={localStake} localUnstake={localUnstake} account={account} reload={reload} pendingReward={pendingReward} isRotating={isRotating} handleRefreshClick={handleRefreshClick} />
+            }
         </>
 
     )
